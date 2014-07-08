@@ -132,6 +132,9 @@ rl.on('line', function (val) {
 // get private enc key
 // '$msg$encrypt$keypair<$private><$key>'
 
+// set link contract
+// (=pascalo/=lfielke)$do/$get/=pascalo<#foo>
+// (=pascalo/=lfielke)($do$if/$true){$from}/$is/=lfielke
 
 console.log('Hello, input required:');
 ask();
