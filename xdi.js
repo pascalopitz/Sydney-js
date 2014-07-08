@@ -1,10 +1,12 @@
-(function (window) {
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+// (function (window) {
 
 	//
 	// VERSION: 0.3-SNAPSHOT
 	//
 
-	'use strict';
+	// 'use strict';
 
 	/*
 	 * Statement, Segment, Subsegment, Xref classes
@@ -1453,6 +1455,8 @@
 	 * Assign global 'xdi' object
 	 */
 
-	window.xdi = xdi;
+//	window.xdi = xdi;
 
-})(window || this);
+// })(window || this);
+
+module.exports = xdi;
