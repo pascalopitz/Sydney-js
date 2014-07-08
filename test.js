@@ -1,20 +1,36 @@
 var xdi = require('xdi');
+var Promise = require('promise');
 
-xdi.discovery(
+var XDI_DISCOVERY = "https://xdidiscoveryservice.xdi.net/";
+var XDI_ROOT_SERVICES = ["<$https><$connect><$xdi>"];
 
-    '=pascalo',
-    function(discovery) {
-      console.log(discovery);
-      // $("#discoveryresult").html("");
-      // $("#discoveryresult").append("<p class='segment'>CLOUD NUMBER: " + discovery.cloudNumber() + "</p>");
-      // $("#discoveryresult").append("<p class='segment'>XDI ENDPOINT: " + discovery.xdiEndpoint() + "</p>");
-      // for (var i in discovery.services()) {
-      //   $("#discoveryresult").append("<p class='segment'>SERVICE: " + i + " --> " + discovery.services()[i] + "</p>");
-      // }
-    },
-    function(errorText) {
-      console.log(errorText);
-    },
-    ["<$https><$connect><$xdi>"],
-    "https://xdidiscoveryservice.xdi.net/"
-  );
+
+function discovery(name) {
+  var promise = new Promise(function (resolve, reject) {
+    xdi.discovery(
+      name,
+      resolve,
+      reject,
+      XDI_ROOT_SERVICES,
+      XDI_DISCOVERY
+    );
+  });
+
+  return promise;
+}
+
+
+if(!process.argv[2]) {
+  console.log('Usage: test.js =mycloudname');
+  process.exit();
+}
+
+discovery(process.argv[2]).then(function (discovery) {
+  console.log('CLOUD NUMBER', discovery.cloudNumber());
+  console.log('XDI ENDPOINT', discovery.xdiEndpoint());
+  for (var i in discovery.services()) {
+    console.log('SERVICE: ', i,  discovery.services()[i]);
+  }
+}, function (err) {
+  console.log('Error', err);
+});
