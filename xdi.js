@@ -1,4 +1,6 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+if(!XMLHttpRequest) {
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+}
 
 // (function (window) {
 
@@ -1455,8 +1457,16 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 	 * Assign global 'xdi' object
 	 */
 
-//	window.xdi = xdi;
+try {
+  window.xdi = xdi;
+} catch(e) {
+
+}
 
 // })(window || this);
 
-module.exports = xdi;
+try {
+  module.exports = xdi;
+} catch(e) {
+
+}
