@@ -29,15 +29,25 @@ function discovery(name) {
 }
 
 
-function message(msg) {
+function message(op, msg) {
   return function (d) {
 
     var promise = new Promise(function (resolve, reject) {
 
-      var message = xdi.message(d.cloudNumber());
-      message.toAddress('(' + d.cloudNumber() + ')');
-      message.linkContract('('+d.cloudNumber()+'/$public)$do');
-      message.operation('$get', d.cloudNumber()+msg);
+      var from = d.cloudNumber();
+      var to = d.cloudNumber();
+
+      var message = xdi.message(from);
+      message.toAddress('(' + to + ')');
+
+      // link contract: (from/to)$do
+      message.linkContract('('+from+'/'+to+')$do');
+
+      // msg: to+msg
+      message.operation(op, to+msg);
+
+      // plaintext password
+      message.secretToken(inputValues.password);
 
       console.log('Message sending ...');
       console.log(xdi.io.write(message.messageEnvelope().graph()));
@@ -66,7 +76,7 @@ function ask() {
 
 var requiredValues = [
   'cloudname',
-  // 'password'
+  'password'
 ];
 var inputValues = {};
 
@@ -86,15 +96,42 @@ rl.on('line', function (val) {
 
     discovery(inputValues.cloudname)
       .then(function (d) {
-        message('$msg$sig$keypair<$public><$key>')(d).then(function (response) {
+        // fetch private key
+        // message('$get', '$msg$encrypt$keypair<$private><$key>')(d).then(function (response) {
+        //   console.log('finish', response.statements());
+        // });
+
+        // set foo
+        // message('$set', '<#foo>&/&/"bar"')(d).then(function (response) {
+        //   console.log('finish', response.statements());
+        // });
+
+        // get foo
+        message('$get', '<#foo>')(d).then(function (response) {
           console.log('finish', response.statements());
         });
+      }, function(err) {
+        console.log(err);
       });
 
   } else {
     ask();
   }
 });
+
+
+// get public sign key
+// '$msg$sign$keypair<$public><$key>'
+
+// get private sign key
+// '$msg$sign$keypair<$private><$key>'
+
+// get public enc key
+// '$msg$encrypt$keypair<$public><$key>'
+
+// get private enc key
+// '$msg$encrypt$keypair<$private><$key>'
+
 
 console.log('Hello, input required:');
 ask();
