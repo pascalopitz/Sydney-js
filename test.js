@@ -39,7 +39,8 @@ function message(msg) {
       message.linkContract('('+d.cloudNumber()+'/$public)$do');
       message.operation('$get', d.cloudNumber()+msg);
 
-      console.log('Message sent ...');
+      console.log('Message sending ...');
+      console.log(xdi.io.write(message.messageEnvelope().graph()));
 
       message.send(
         d.xdiEndpoint(),
