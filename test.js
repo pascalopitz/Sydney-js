@@ -3,7 +3,7 @@ var readline = require('readline');
 
 // XDI stuff
 
-var xdi = require('xdi');
+var xdi = require('./xdi.js');
 
 var XDI_DISCOVERY = "https://xdidiscoveryservice.xdi.net/";
 var XDI_ROOT_SERVICES = ["<$https><$connect><$xdi>"];
